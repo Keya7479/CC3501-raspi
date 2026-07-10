@@ -9,11 +9,12 @@ You must install:
  - `libopencv-dev`
  - `gstreamer1.0-tools` 
  - `gstreamer1.0-plugins-base-apps`
+ - `gstreamer1.0-libcamera`
 
 Run this command on your Raspberry Pi:
 
 ```
-$ sudo apt install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base-apps
+$ sudo apt install libopencv-dev gstreamer1.0-tools gstreamer1.0-plugins-base-apps gstreamer1.0-libcamera
 ```
 
 ## Test the camera and gstreamer installation
