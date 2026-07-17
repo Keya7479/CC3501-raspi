@@ -36,6 +36,9 @@ int main()
     int iLowV = 0;
     int iHighV = 255;
 
+    int open_radius = 2;
+    int close_radius = 2;
+
     // Create trackbars in "Control" window
     cv::createTrackbar("LowH", "Control", &iLowH, 179); // Hue (0 - 179)
     cv::createTrackbar("HighH", "Control", &iHighH, 179);
@@ -45,6 +48,9 @@ int main()
 
     cv::createTrackbar("LowV", "Control", &iLowV, 255); // Value (0 - 255)
     cv::createTrackbar("HighV", "Control", &iHighV, 255);
+
+    cv::createTrackbar("Open Radius", "Control", &open_radius, 10);
+    cv::createTrackbar("Close Radius", "Control", &close_radius, 10);
 
     // Create a threshold window
     cv::namedWindow("Thresholded", cv::WINDOW_AUTOSIZE);
@@ -95,8 +101,10 @@ int main()
         cv::inRange(hsv_frame, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), thresh_frame);
 
         // Get structuring element
-        cv::Mat open_kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
-        cv::Mat close_kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
+        int open_kernel_size = 2 * open_radius + 1;
+        int close_kernel_size = 2 * close_radius + 1;
+        cv::Mat open_kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(open_kernel_size, open_kernel_size));
+        cv::Mat close_kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(close_kernel_size, close_kernel_size));
 
         // Open morphology operation (remove 'salt' noise)
         morphologyEx(thresh_frame, thresh_frame, cv::MORPH_OPEN, open_kernel);
