@@ -9,7 +9,7 @@ int main()
         " ! videoconvert"
         " ! videoscale"
         " ! video/x-raw, width=400, height=300" // can downsample the image after capturing
-        " ! videoflip method=rotate-180" // remove this line if the image is upside-down
+       // " ! videoflip method=rotate-180" // remove this line if the image is upside-down
         " ! appsink drop=true max_buffers=2";
     cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
     if(!cap.isOpened()) {

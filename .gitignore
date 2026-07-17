@@ -1,1 +1,15 @@
+# CMake build output
 build/
+cmake-build-*/
+
+# Compiled files
+*.o
+*.so
+*.a
+
+# Temporary editor files
+*~
+*.swp
+
+# VS Code machine-specific settings
+.vscode/
