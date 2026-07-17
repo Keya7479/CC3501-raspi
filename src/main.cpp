@@ -58,19 +58,21 @@ int main()
 
     for (;;)
     {
-        // for each frame: capture, show original frame, measure frame rate, convert to HSV, threshold, show thresholded frame,
+        // for each frame: 
+        // 1. capture, show original frame, measure frame rate 
+        // 2. Convert to HSV, threshold, show thresholded frame
 
         cv::Mat display_frame = bgr_frame.clone(); // deep copy because we will modify it below
 
         // capture frame
-        if (!cap.read(bgr_frame))
+        if (!cap.read(display_frame))
         {
             printf("Could not read a frame.\n");
             break;
         }
 
         // show frame
-        cv::imshow("Camera", bgr_frame);
+        cv::imshow("Camera", display_frame);
         cv::waitKey(1);
 
         // Measure the frame rate
@@ -85,7 +87,7 @@ int main()
         }
 
         // Convert to HSV colour space
-        cv::cvtColor(bgr_frame, hsv_frame, cv::COLOR_BGR2HSV);
+        cv::cvtColor(display_frame, hsv_frame, cv::COLOR_BGR2HSV);
 
         // Threshold the frame
         cv::inRange(hsv_frame, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), thresh_frame);
