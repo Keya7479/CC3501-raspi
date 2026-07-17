@@ -7,6 +7,7 @@ int main()
     cv::Mat frame;
     cv::Mat bgr_frame;
     cv::Mat hsv_frame;
+
     cv::Mat thresh_frame;
 
     // Open the video camera.
@@ -58,9 +59,10 @@ int main()
 
     for (;;)
     {
-        // for each frame: 
-        // 1. capture, show original frame, measure frame rate 
-        // 2. Convert to HSV, threshold, show thresholded frame
+        // for each frame:
+        // 1. CAMERA: capture, show original frame, measure frame rate
+        // 2. THRESHOLDING: Convert to HSV, threshold, show thresholded frame
+        // 3. MORPHOLGY: create structuring element, perform open and close ops, show cleaned thresholded frame
 
         cv::Mat display_frame = bgr_frame.clone(); // deep copy because we will modify it below
 
@@ -91,8 +93,18 @@ int main()
 
         // Threshold the frame
         cv::inRange(hsv_frame, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), thresh_frame);
-        
-        // Show the thresholded frame
+
+        // Get structuring element
+        cv::Mat open_kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
+        cv::Mat close_kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
+
+        // Open morphology operation (remove 'salt' noise)
+        morphologyEx(thresh_frame, thresh_frame, cv::MORPH_OPEN, open_kernel);
+
+        // Close morphology operation (remove 'pepper' noise)
+        morphologyEx(thresh_frame, thresh_frame, cv::MORPH_CLOSE, close_kernel);
+
+        // Show the cleaned thresholded frame
         cv::imshow("Thresholded", thresh_frame);
     }
 
