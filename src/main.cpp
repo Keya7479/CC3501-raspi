@@ -67,8 +67,9 @@ int main()
     {
         // for each frame:
         // 1. CAMERA: capture, show original frame, measure frame rate
-        // 2. THRESHOLDING: Convert to HSV, threshold, show thresholded frame
+        // 2. THRESHOLDING: Convert to HSV, threshold
         // 3. MORPHOLGY: create structuring element, perform open and close ops, show cleaned thresholded frame
+        // 4. COM: calculate centre of mass, print
 
         cv::Mat display_frame = bgr_frame.clone(); // deep copy because we will modify it below
 
@@ -111,6 +112,20 @@ int main()
 
         // Close morphology operation (remove 'pepper' noise)
         morphologyEx(thresh_frame, thresh_frame, cv::MORPH_CLOSE, close_kernel);
+
+        cv::Moments moments = cv::moments(thresh_frame, true);
+
+        if (moments.m00 > 0)
+        {
+            // There were nonzero pixels in the threshold,
+            // i.e. we detected something.
+            // Calculate the x and y centre of mass:
+            double x = moments.m10 / moments.m00;
+            double y = moments.m01 / moments.m00;
+
+            printf(
+                "\rObject centre: x = %d, y = %d\n", (int)x, (int)y);
+        }
 
         // Show the cleaned thresholded frame
         cv::imshow("Thresholded", thresh_frame);
